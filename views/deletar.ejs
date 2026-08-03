@@ -1,0 +1,47 @@
+<%- include('partials/head', { title: 'Deletar conta' }) %>
+
+<section class="relative py-16">
+  <div class="relative mx-auto max-w-lg px-5">
+    <div class="text-center">
+      <span class="tag bg-rose">Passo radical</span>
+      <h1 class="font-heading text-4xl font-black tracking-tight mt-6">Deletar <span class="accent-word text-royal">conta</span></h1>
+      <p class="mt-4 text-ink-light leading-relaxed">
+        Você está logado como <strong class="text-ink"><%= user.username %></strong> (<%= user.email %>).
+        Apagar a conta remove seus créditos, pagamentos e histórico de cálculos.
+        Não tem recuperação — nem a IA consegue desfazer essa conta.
+      </p>
+    </div>
+
+    <div class="mt-8 border-3 border-ink rounded-card bg-white p-7 shadow-solid-lg">
+      <p class="eyebrow">O que será apagado</p>
+      <ul class="mt-3 space-y-2.5 text-sm text-ink">
+        <li class="flex gap-2.5"><span class="material-symbols-outlined text-rose !text-sm" aria-hidden="true">close</span>Conta e acesso</li>
+        <li class="flex gap-2.5"><span class="material-symbols-outlined text-rose !text-sm" aria-hidden="true">close</span>Créditos restantes</li>
+        <li class="flex gap-2.5"><span class="material-symbols-outlined text-rose !text-sm" aria-hidden="true">close</span>Histórico de cálculos e resoluções</li>
+        <li class="flex gap-2.5"><span class="material-symbols-outlined text-rose !text-sm" aria-hidden="true">close</span>Pagamentos registrados</li>
+      </ul>
+      <p class="mt-4 text-xs text-ink-light">
+        Se você assinou alguma edição e está no meio dela, deletar a conta encerra o acesso na hora.
+        Seu dinheiro não volta — a calculadora calcula isso com precisão.
+      </p>
+
+      <form method="post" action="/conta/deletar" class="mt-7 space-y-4">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+        <label class="flex items-start gap-3 text-sm text-ink-light cursor-pointer">
+          <input type="checkbox" id="confirmDelete" required class="mt-0.5 w-5 h-5 accent-rose cursor-pointer" />
+          Eu entendi que isso é irreversível e quero deletar minha conta mesmo assim.
+        </label>
+        <button id="btnDelete" type="submit" class="w-full px-5 py-3 border-3 border-ink rounded-full bg-rose text-ink text-sm font-bold shadow-solid btn-hover transition cursor-pointer">
+          Deletar minha conta
+        </button>
+      </form>
+
+      <a href="/" class="mt-4 inline-flex items-center justify-center w-full gap-2 px-5 py-3 border-3 border-ink rounded-full bg-white text-ink text-sm font-bold shadow-solid-sm btn-hover no-underline">
+        <span class="material-symbols-outlined !text-sm" aria-hidden="true">arrow_back</span>
+        Mudei de ideia, voltar
+      </a>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/foot') %>

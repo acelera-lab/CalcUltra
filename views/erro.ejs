@@ -1,0 +1,18 @@
+<%- include('partials/head', { title: 'Erro' }) %>
+
+<section class="relative py-20 flex-1 flex items-center justify-center">
+  <div class="relative w-full max-w-lg mx-5 text-center">
+    <div class="w-16 h-16 mx-auto border-3 border-ink rounded-card bg-royal text-white shadow-solid flex items-center justify-center">
+      <span class="material-symbols-outlined !text-3xl" aria-hidden="true">error</span>
+    </div>
+    <h1 class="font-heading text-4xl font-black tracking-tight mt-6">Algo saiu do esperado</h1>
+    <p class="mt-3 text-ink-light">Até a calculadora mais completa do mundo tem dias difíceis.</p>
+    <div class="mt-8 px-6 py-5 border-3 border-ink rounded-card bg-white text-ink text-sm shadow-solid"><%= message %></div>
+    <a href="/" class="mt-8 inline-flex items-center gap-2 px-7 py-3 border-3 border-ink rounded-full bg-gold text-ink text-sm font-bold shadow-solid btn-hover no-underline">
+      <span class="material-symbols-outlined !text-sm" aria-hidden="true">arrow_back</span>
+      Voltar ao início
+    </a>
+  </div>
+</section>
+
+<%- include('partials/foot') %>

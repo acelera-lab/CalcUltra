@@ -1,0 +1,11 @@
+node_modules/
+dist/
+data/
+tests/
+scripts/
+.git/
+.github/
+.env
+.env.example
+*.log
+*.md

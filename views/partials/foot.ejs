@@ -1,0 +1,23 @@
+  </main>
+  <script type="application/ld+json">
+  <%- JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'CalcUltra Deluxe Edition',
+    url: typeof appUrl !== 'undefined' ? appUrl : '',
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Any',
+    description: 'A calculadora mais completa do mundo. Edições Semanal (R$ 1), Mensal (R$ 5) e Vitalícia (R$ 50), pagamento via Pix. Inclui resolvedor de contas de prova com IA.',
+    offers: (typeof plans !== 'undefined' && plans)
+      ? Object.values(plans).map((p) => ({
+          '@type': 'Offer',
+          name: p.title,
+          price: String(p.price),
+          priceCurrency: 'BRL',
+          description: p.tag,
+        }))
+      : [],
+  }) %>
+  </script>
+</body>
+</html>

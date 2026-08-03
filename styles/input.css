@@ -1,0 +1,154 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-heading: "Fraunces", Georgia, serif;
+  --font-mono: "Google Sans Code", ui-monospace, SFMono-Regular, monospace;
+
+  --color-paper: #F5F0EB;
+  --color-ink: #1A1A1A;
+  --color-ink-light: #4A4A4A;
+  --color-royal: #1E4FE8;
+  --color-royal-dark: #1638A8;
+  --color-gold: #F5C518;
+  --color-agua: #2EC4B6;
+  --color-rose: #FF5E9C;
+  --color-tangerine: #FF6B35;
+  --color-red: #E63946;
+
+  --radius-card: 12px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply font-body antialiased bg-paper text-ink;
+}
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #1e4fe8 #f5f0eb;
+}
+
+::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f5f0eb;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e4fe8;
+  border: 3px solid #1a1a1a;
+  border-radius: 7px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #f5c518;
+}
+
+::-webkit-scrollbar-corner {
+  background: #f5f0eb;
+}
+
+::-webkit-scrollbar-track-piece {
+  background: #f5f0eb;
+}
+
+@utility border-3 {
+  border-width: 3px;
+}
+
+@utility border-card {
+  border: 3px solid #1a1a1a;
+  border-radius: 12px;
+}
+
+@utility shadow-solid {
+  box-shadow: 4px 4px 0px 0px #1a1a1a;
+}
+
+@utility shadow-solid-sm {
+  box-shadow: 2px 2px 0px 0px #1a1a1a;
+}
+
+@utility shadow-solid-lg {
+  box-shadow: 6px 6px 0px 0px #1a1a1a;
+}
+
+.btn-hover {
+  transition: all 0.2s ease;
+}
+.btn-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 2px 2px 0px 0px #1a1a1a;
+}
+
+.card-hover {
+  transition: all 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 2px 2px 0px 0px #1a1a1a;
+}
+
+.divider {
+  border: none;
+  border-top: 3px solid #1a1a1a;
+}
+
+.tag {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-family: "Google Sans Code", monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  border: 3px solid #1a1a1a;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  box-shadow: 3px 3px 0px 0px #1a1a1a;
+  border-color: #1a1a1a;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.plan-badge.paid {
+  @apply bg-royal text-white border-3 border-ink;
+}
+.plan-badge.free {
+  @apply bg-white text-ink-light border-3 border-ink;
+}
+
+.eyebrow {
+  @apply font-mono text-[10px] uppercase tracking-[0.2em] text-ink-light font-bold;
+}
+
+.calc-key {
+  @apply h-12 sm:h-14 rounded-card text-lg font-semibold flex items-center justify-center transition cursor-pointer select-none active:scale-[0.96] border-3 border-ink shadow-solid-sm;
+}
+
+.calc-key:hover {
+  transform: translateY(-2px);
+  box-shadow: 2px 2px 0px 0px #1a1a1a;
+}
+
+.accent-word {
+  @apply font-heading italic;
+}

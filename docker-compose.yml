@@ -1,0 +1,32 @@
+services:
+  calculadora:
+    build: .
+    ports:
+      - "6000:6000"
+    environment:
+      NODE_ENV: production
+      PORT: 6000
+      APP_URL: ${APP_URL:-http://localhost:6000}
+      SESSION_SECRET: ${SESSION_SECRET:-troca-isso-em-producao-por-favor}
+      MP_ACCESS_TOKEN: ${MP_ACCESS_TOKEN:-}
+      MP_WEBHOOK_SECRET: ${MP_WEBHOOK_SECRET:-}
+      OPENROUTER_KEY: ${OPENROUTER_KEY:-}
+      OPENROUTER_MODEL: ${OPENROUTER_MODEL:-inclusionai/ling-3.0-flash:free}
+      OPENROUTER_FALLBACK_MODELS: ${OPENROUTER_FALLBACK_MODELS:-nvidia/nemotron-3-super-120b-a12b:free,cohere/north-mini-code:free,google/gemma-4-26b-a4b-it:free}
+      EMAIL_HOST: ${EMAIL_HOST:-}
+      EMAIL_PORT: ${EMAIL_PORT:-587}
+      EMAIL_USER: ${EMAIL_USER:-}
+      EMAIL_PASS: ${EMAIL_PASS:-}
+      EMAIL_FROM: ${EMAIL_FROM:-}
+      REMINDER_INTERVAL_HOURS: ${REMINDER_INTERVAL_HOURS:-6}
+      REMINDER_MIN_DAYS: ${REMINDER_MIN_DAYS:-3}
+      DB_PATH: /app/data/db.sqlite
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:6000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s

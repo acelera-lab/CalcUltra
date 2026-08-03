@@ -1,0 +1,91 @@
+<%- include('partials/head', { title: 'Pagar com Pix' }) %>
+
+<section class="relative py-12">
+  <div class="relative mx-auto max-w-lg px-5">
+    <div class="text-center">
+      <span class="tag bg-gold">Pagamento</span>
+      <h1 class="font-heading text-4xl font-black tracking-tight mt-6">Pix, sem <span class="accent-word text-royal">burocracia</span></h1>
+      <p class="mt-4 text-ink-light leading-relaxed">
+        Escaneie o QR Code ou copie o código. Assim que o pagamento cair, sua
+        edição <%= plan.title %> ativa sozinha.
+      </p>
+    </div>
+
+    <div class="border-3 border-ink rounded-card bg-white p-7 mt-10 shadow-solid-lg">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="eyebrow"><%= plan.title %></p>
+          <p class="mt-1 text-3xl font-heading font-black tracking-tight">R$ <%= plan.price %></p>
+          <p class="text-xs text-ink-light mt-1"><%= plan.tag %></p>
+        </div>
+        <span class="px-3 py-1.5 border-3 border-ink rounded-full bg-gold text-ink text-[10px] uppercase tracking-[0.2em] font-bold rotate-2">Pix</span>
+      </div>
+
+      <div class="mt-7 flex flex-col items-center">
+        <% if (qrBase64) { %>
+          <div class="w-56 h-56 bg-white border-3 border-ink rounded-card p-2 shadow-solid-sm">
+            <img src="data:image/png;base64,<%= qrBase64 %>" alt="QR Code Pix" class="w-full h-full" />
+          </div>
+        <% } else { %>
+          <div class="w-56 h-56 border-3 border-dashed border-ink/40 rounded-card flex items-center justify-center text-ink-light text-sm text-center px-4">
+            Qr não gerado. Tenta de novo daqui a pouco.
+          </div>
+        <% } %>
+
+        <% if (qrCode) { %>
+          <p class="eyebrow mt-6 !text-ink-light">Código copia e cola</p>
+          <div class="mt-2 w-full flex gap-2">
+            <code id="pixCode" class="flex-1 min-w-0 px-4 py-3 border-3 border-ink rounded-card bg-paper font-mono text-xs text-ink break-all max-h-24 overflow-y-auto select-all"><%= qrCode %></code>
+            <button id="copyPix" type="button" class="shrink-0 px-4 py-3 border-3 border-ink rounded-card bg-ink text-paper text-xs font-bold btn-hover transition cursor-pointer">Copiar</button>
+          </div>
+        <% } %>
+      </div>
+
+      <div class="mt-7 flex items-center justify-between gap-3 border-t-3 border-ink pt-6">
+        <p class="text-xs text-ink-light">Pagamento <%= paymentId %> · atualiza sozinho</p>
+        <button id="btnCheckPix" type="button" class="px-5 py-2.5 border-3 border-ink rounded-full bg-royal text-white text-xs font-bold shadow-solid-sm btn-hover transition cursor-pointer">Já paguei, verificar</button>
+      </div>
+    </div>
+
+    <p class="mt-6 text-center text-xs text-ink-light">
+      Cancelou a ideia? <a href="/planos" class="font-bold text-ink underline underline-offset-2">Voltar às edições</a>.
+    </p>
+  </div>
+</section>
+
+<script>
+  (() => {
+    const paymentId = Number(<%= paymentId %>);
+    const btn = document.getElementById('btnCheckPix');
+    const code = document.getElementById('pixCode');
+    const copyBtn = document.getElementById('copyPix');
+
+    if (copyBtn && code) {
+      copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(code.textContent || '').then(() => {
+          copyBtn.textContent = 'Copiado!';
+          setTimeout(() => { copyBtn.textContent = 'Copiar'; }, 1500);
+        });
+      });
+    }
+
+    async function check() {
+      try {
+        const res = await fetch('/api/pagamento/' + paymentId + '/status');
+        const data = await res.json();
+        if (data.approved) {
+          window.location.href = '/?msg=' + encodeURIComponent('Pix aprovado! A calculadora agora é sua.');
+          return true;
+        }
+      } catch {}
+      return false;
+    }
+
+    if (btn) btn.addEventListener('click', check);
+    const timer = setInterval(async () => {
+      if (await check()) clearInterval(timer);
+    }, 4000);
+  })();
+</script>
+
+<%- include('partials/foot') %>

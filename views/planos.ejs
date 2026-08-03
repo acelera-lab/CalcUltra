@@ -1,0 +1,147 @@
+<%- include('partials/head', { title: 'Edições' }) %>
+
+<section class="relative pt-6 sm:pt-8 pb-16">
+  <div class="relative mx-auto max-w-6xl px-5">
+    <div class="text-center">
+      <span class="tag bg-royal text-white">Edições</span>
+      <h1 class="font-heading text-4xl sm:text-6xl font-black tracking-tight mt-5">Escolha sua <span class="accent-word text-royal">edição</span></h1>
+      <p class="mt-5 text-lg text-ink-light max-w-2xl mx-auto">
+        A edição gratuita oferece 1 crédito por dia e o essencial. As edições pagas liberam
+        <strong class="text-ink font-bold">todas</strong> as funções, sem limite. Tudo via Pix, sem burocracia.
+      </p>
+      <% if (user && planStatus.status === 'active' && user.plan !== 'vitalicio') { %>
+        <p class="mt-3 text-sm text-ink-light">Sua edição está ativa: dá pra renovar ou trocar por uma maior. Quando ela acabar, qualquer edição vale — até a semanal de R$ 1.</p>
+      <% } %>
+    </div>
+
+    <div class="mt-12 sm:mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 items-stretch">
+      <div class="flex flex-col border-3 border-ink rounded-card bg-white p-6 shadow-solid-lg card-hover">
+        <div class="flex items-center justify-between">
+          <h2 class="font-heading font-black text-xl">Gratuita</h2>
+          <span class="material-symbols-outlined text-ink-light !text-lg" aria-hidden="true">workspace_premium</span>
+        </div>
+        <p class="mt-6 text-4xl font-heading font-black tracking-tight">R$ 0</p>
+        <p class="text-sm text-ink-light mt-1">para sempre</p>
+        <ul class="mt-6 space-y-2.5 text-sm text-ink flex-1">
+          <li class="flex gap-2.5"><span class="material-symbols-outlined text-royal !text-sm" aria-hidden="true">check</span>1 crédito por dia</li>
+          <li class="flex gap-2.5"><span class="material-symbols-outlined text-royal !text-sm" aria-hidden="true">check</span>É preciso entrar para resgatar</li>
+          <li class="flex gap-2.5"><span class="material-symbols-outlined text-royal !text-sm" aria-hidden="true">check</span>Operações essenciais</li>
+          <li class="flex gap-2.5"><span class="material-symbols-outlined text-royal !text-sm" aria-hidden="true">check</span>1 cálculo = 1 crédito</li>
+        </ul>
+        <% if (user && planStatus.status === 'active') { %>
+          <div class="mt-7 w-full text-center px-5 py-3 border-3 border-ink rounded-full bg-paper text-sm font-bold text-ink-light cursor-not-allowed">Só quando o plano atual acabar</div>
+        <% } else { %>
+          <a href="/#acesso" class="mt-7 w-full text-center px-5 py-3 border-3 border-ink rounded-full bg-gold text-ink text-sm font-bold shadow-solid btn-hover no-underline">Começar gratuita</a>
+        <% } %>
+      </div>
+
+      <div class="flex flex-col border-3 border-ink rounded-card bg-agua p-6 shadow-solid-lg card-hover">
+        <div class="flex items-center justify-between">
+          <h2 class="font-heading font-black text-xl">Semanal</h2>
+          <% if (user && user.plan === 'semanal' && planStatus.status === 'active') { %>
+            <span class="inline-flex items-center px-2.5 py-1 border-2 border-ink rounded-full bg-gold text-ink text-[10px] uppercase tracking-[0.2em] font-bold rotate-2">Seu plano</span>
+          <% } else { %>
+            <span class="material-symbols-outlined text-ink !text-lg" aria-hidden="true">schedule</span>
+          <% } %>
+        </div>
+        <p class="mt-6 text-4xl font-heading font-black tracking-tight">R$ 1<span class="text-base font-bold text-ink/70">/semana</span></p>
+        <p class="text-sm text-ink/70 mt-1">para ansiosos</p>
+        <ul class="mt-6 space-y-2.5 text-sm text-ink flex-1">
+          <li class="flex gap-2.5"><span class="material-symbols-outlined text-ink !text-sm" aria-hidden="true">check</span>Calculadora completa por 7 dias</li>
+          <li class="flex gap-2.5"><span class="material-symbols-outlined text-ink !text-sm" aria-hidden="true">check</span>Sem limite de uso</li>
+          <li class="flex gap-2.5"><span class="material-symbols-outlined text-ink !text-sm" aria-hidden="true">check</span>Científico + conversor + IMC</li>
+          <li class="flex gap-2.5"><span class="material-symbols-outlined text-ink !text-sm" aria-hidden="true">check</span>Julgamento incluso</li>
+        </ul>
+        <%
+          const semanalGate = user ? (planGates && planGates.semanal) : null;
+          const semanalIsCurrent = user && user.plan === 'semanal' && planStatus.status === 'active';
+          const semanalCanBuy = !user || (semanalGate && semanalGate.allowed);
+        %>
+        <% if (semanalIsCurrent) { %>
+          <a href="/pagar/semanal" class="mt-7 w-full text-center px-5 py-3 border-3 border-ink rounded-full bg-white text-ink text-sm font-bold shadow-solid btn-hover no-underline">Renovar · R$ 1</a>
+        <% } else if (semanalCanBuy) { %>
+          <a href="/pagar/semanal" class="mt-7 w-full text-center px-5 py-3 border-3 border-ink rounded-full bg-white text-ink text-sm font-bold shadow-solid btn-hover no-underline">Assinar · R$ 1</a>
+        <% } else { %>
+          <div class="mt-7 w-full text-center px-5 py-3 border-3 border-ink rounded-full bg-white/60 text-sm font-bold text-ink/70 cursor-not-allowed" title="<%= semanalGate ? semanalGate.reason : '' %>"><%= user && user.plan === 'vitalicio' ? 'Você já é vitalício. Não tem o que trocar.' : 'Só quando o plano atual acabar' %></div>
+        <% } %>
+      </div>
+
+      <div class="relative flex flex-col border-3 border-ink rounded-card bg-royal text-white p-6 shadow-solid-lg overflow-hidden">
+        <div class="pointer-events-none absolute inset-0">
+          <div class="absolute -top-16 -right-16 w-56 h-56 rounded-full bg-gold/20 blur-3xl"></div>
+        </div>
+        <div class="relative flex flex-col flex-1 min-w-0">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 border-3 border-ink rounded-full bg-gold text-ink text-[10px] uppercase tracking-[0.25em] font-bold shadow-solid-sm -rotate-2 self-start">
+            <span class="material-symbols-outlined !text-sm" aria-hidden="true">star</span>
+            Recomendada
+          </div>
+          <div class="mt-4 flex items-center justify-between">
+            <h2 class="font-heading font-black text-xl">Mensal</h2>
+            <% if (user && user.plan === 'mensal' && planStatus.status === 'active') { %>
+              <span class="inline-flex items-center px-2.5 py-1 border-2 border-ink rounded-full bg-gold text-ink text-[10px] uppercase tracking-[0.2em] font-bold rotate-2">Seu plano</span>
+            <% } %>
+          </div>
+          <p class="mt-4 text-4xl font-heading font-black tracking-tight">R$ 5<span class="text-base font-bold text-white/70">/mês</span></p>
+          <p class="text-sm text-white/70 mt-1">a mais escolhida</p>
+          <ul class="mt-6 space-y-2.5 text-sm text-white flex-1">
+            <li class="flex gap-2.5"><span class="material-symbols-outlined text-gold !text-sm" aria-hidden="true">check</span>Calculadora completa por 30 dias</li>
+            <li class="flex gap-2.5"><span class="material-symbols-outlined text-gold !text-sm" aria-hidden="true">check</span>Mais barato que 1 açaí</li>
+            <li class="flex gap-2.5"><span class="material-symbols-outlined text-gold !text-sm" aria-hidden="true">check</span>Científico + conversor + IMC</li>
+            <li class="flex gap-2.5"><span class="material-symbols-outlined text-gold !text-sm" aria-hidden="true">check</span>Conta pro amigo que assina SaaS</li>
+          </ul>
+          <%
+            const mensalGate = user ? (planGates && planGates.mensal) : null;
+            const mensalIsCurrent = user && user.plan === 'mensal' && planStatus.status === 'active';
+            const mensalCanBuy = !user || (mensalGate && mensalGate.allowed);
+          %>
+          <% if (mensalIsCurrent) { %>
+            <a href="/pagar/mensal" class="relative mt-7 w-full text-center px-5 py-3 border-3 border-ink rounded-full bg-gold text-ink text-sm font-bold shadow-solid btn-hover no-underline">Renovar · R$ 5</a>
+          <% } else if (mensalCanBuy) { %>
+            <a href="/pagar/mensal" class="relative mt-7 w-full text-center px-5 py-3 border-3 border-ink rounded-full bg-gold text-ink text-sm font-bold shadow-solid btn-hover no-underline">Assinar · R$ 5</a>
+          <% } else { %>
+            <div class="relative mt-7 w-full text-center px-5 py-3 border-3 border-ink rounded-full bg-white/15 text-white/70 text-sm font-bold cursor-not-allowed" title="<%= mensalGate ? mensalGate.reason : '' %>"><%= user && user.plan === 'vitalicio' ? 'Você já é vitalício. Não tem o que trocar.' : 'Só quando o plano atual acabar' %></div>
+          <% } %>
+        </div>
+      </div>
+
+      <div class="flex flex-col border-3 border-ink rounded-card bg-gold p-6 shadow-solid-lg card-hover">
+        <div class="flex items-center justify-between">
+          <h2 class="font-heading font-black text-xl">Vitalícia</h2>
+          <% if (user && user.plan === 'vitalicio') { %>
+            <span class="inline-flex items-center px-2.5 py-1 border-2 border-ink rounded-full bg-ink text-gold text-[10px] uppercase tracking-[0.2em] font-bold rotate-2">Seu plano</span>
+          <% } else { %>
+            <span class="material-symbols-outlined text-ink !text-lg" aria-hidden="true">emoji_events</span>
+          <% } %>
+        </div>
+        <p class="mt-6 text-4xl font-heading font-black tracking-tight">R$ 50<span class="text-base font-bold text-ink/70">/única</span></p>
+        <p class="text-sm text-ink/70 mt-1">o ápice</p>
+        <ul class="mt-6 space-y-2.5 text-sm text-ink flex-1">
+          <li class="flex gap-2.5"><span class="material-symbols-outlined text-ink !text-sm" aria-hidden="true">check</span>Calculadora completa para sempre</li>
+          <li class="flex gap-2.5"><span class="material-symbols-outlined text-ink !text-sm" aria-hidden="true">check</span>10 meses de mensalidade de uma vez</li>
+          <li class="flex gap-2.5"><span class="material-symbols-outlined text-ink !text-sm" aria-hidden="true">check</span>Chega de se preocupar com a vida</li>
+          <li class="flex gap-2.5"><span class="material-symbols-outlined text-ink !text-sm" aria-hidden="true">check</span>Status social incalculável</li>
+        </ul>
+        <%
+          const vitalicioGate = user ? (planGates && planGates.vitalicio) : null;
+          const vitalicioCanBuy = !user || (vitalicioGate && vitalicioGate.allowed);
+        %>
+        <% if (user && user.plan === 'vitalicio') { %>
+          <div class="mt-7 w-full text-center px-5 py-3 border-3 border-ink rounded-full bg-ink text-gold text-sm font-bold cursor-not-allowed">Você já é vitalício. Aproveita.</div>
+        <% } else if (vitalicioCanBuy) { %>
+          <a href="/pagar/vitalicio" class="mt-7 w-full text-center px-5 py-3 border-3 border-ink rounded-full bg-white text-ink text-sm font-bold shadow-solid btn-hover no-underline">Adquirir · R$ 50</a>
+        <% } else { %>
+          <div class="mt-7 w-full text-center px-5 py-3 border-3 border-ink rounded-full bg-ink/10 text-ink/70 text-sm font-bold cursor-not-allowed" title="<%= vitalicioGate ? vitalicioGate.reason : '' %>">Só quando o plano atual acabar</div>
+        <% } %>
+      </div>
+    </div>
+
+    <div class="mt-10 flex justify-center">
+      <a href="/" class="inline-flex items-center gap-1.5 px-5 py-2.5 border-3 border-ink rounded-full bg-white font-mono text-[0.65rem] tracking-[0.12em] uppercase font-bold shadow-solid-sm btn-hover no-underline">
+        <span class="material-symbols-outlined !text-base" aria-hidden="true">arrow_back</span>
+        Voltar
+      </a>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/foot') %>

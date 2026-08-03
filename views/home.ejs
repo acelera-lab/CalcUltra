@@ -1,0 +1,315 @@
+<%- include('partials/head', { title: 'Início' }) %>
+
+<section class="relative pt-10 sm:pt-14 pb-24 mt-8">
+  <div class="relative mx-auto max-w-6xl px-5">
+    <% if (query.msg) { %>
+      <div class="mb-6 flex items-start gap-3 px-5 py-4 border-3 border-ink rounded-card bg-agua shadow-solid text-ink text-sm font-semibold">
+        <span class="material-symbols-outlined shrink-0 !text-base" aria-hidden="true">check_circle</span>
+        <span><%= query.msg %></span>
+      </div>
+    <% } %>
+
+    <div class="grid grid-cols-1 lg:grid-cols-[1.7fr_1fr] gap-6 items-start">
+      <div class="border-card bg-white p-5 sm:p-8 shadow-solid-lg">
+        <div class="inline-flex p-1 mb-6 bg-paper border-3 border-ink rounded-full shadow-solid-sm">
+          <button id="tabCalcBtn" type="button" class="flex-1 px-5 py-2.5 rounded-full text-sm font-bold border-3 border-ink bg-royal text-white shadow-solid-sm transition cursor-pointer">Calculadora</button>
+          <button id="tabAiBtn" type="button" class="flex-1 px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold border-3 border-transparent text-ink-light hover:text-ink transition cursor-pointer">Resolvedor de contas de prova</button>
+        </div>
+
+        <div id="tabCalculadora">
+          <div class="flex items-center justify-between gap-4 flex-wrap mb-6">
+            <div>
+              <p class="eyebrow">CalcUltra</p>
+              <h2 class="font-heading text-2xl sm:text-3xl font-black tracking-tight mt-1.5">O instrumento.</h2>
+            </div>
+            <% if (user) { %>
+              <span id="planBadge" class="plan-badge px-4 py-2 rounded-full text-sm font-semibold border-3 border-ink text-ink-light">verificando edição...</span>
+            <% } %>
+          </div>
+
+          <div id="calcError" class="mb-4 flex items-start gap-3 px-4 py-3.5 border-3 border-ink rounded-card bg-rose text-ink text-sm" hidden>
+            <span class="material-symbols-outlined shrink-0 !text-base" aria-hidden="true">error</span>
+            <span id="calcErrorText" class="leading-relaxed"></span>
+          </div>
+          <div id="calcCreditNote" class="mb-4 flex items-start gap-3 px-4 py-3.5 border-3 border-ink rounded-card bg-gold text-ink text-sm" hidden>
+            <span class="material-symbols-outlined shrink-0 !text-base" aria-hidden="true">info</span>
+            <span id="calcCreditNoteText" class="leading-relaxed"></span>
+          </div>
+
+          <div class="border-3 border-ink rounded-card bg-paper p-4 sm:p-6 shadow-solid">
+            <div class="rounded-card bg-white border-3 border-ink p-5 min-h-[8.5rem] flex flex-col items-end justify-end overflow-hidden">
+              <div id="calcDisplay" class="font-mono text-base sm:text-lg text-ink-light text-right break-all max-w-full min-h-[1.5rem]">&nbsp;</div>
+              <div id="calcResult" class="font-mono font-bold text-4xl sm:text-5xl text-royal text-right break-all max-w-full mt-1.5 min-h-[3rem] tracking-tight">&nbsp;</div>
+            </div>
+
+            <div id="padMain" class="mt-4 grid grid-cols-4 gap-2.5">
+              <button type="button" data-key="AC" class="calc-key bg-rose text-ink">AC</button>
+              <button type="button" data-key="back" class="calc-key bg-white text-ink">
+                <span class="material-symbols-outlined !text-lg" aria-hidden="true">backspace</span>
+              </button>
+              <button type="button" data-key="(" class="calc-key bg-white text-ink-light">(</button>
+              <button type="button" data-key=")" class="calc-key bg-white text-ink-light">)</button>
+
+              <button type="button" data-key="7" class="calc-key bg-white text-ink">7</button>
+              <button type="button" data-key="8" class="calc-key bg-white text-ink">8</button>
+              <button type="button" data-key="9" class="calc-key bg-white text-ink">9</button>
+              <button type="button" data-key="/" class="calc-key bg-gold text-ink">÷</button>
+
+              <button type="button" data-key="4" class="calc-key bg-white text-ink">4</button>
+              <button type="button" data-key="5" class="calc-key bg-white text-ink">5</button>
+              <button type="button" data-key="6" class="calc-key bg-white text-ink">6</button>
+              <button type="button" data-key="*" class="calc-key bg-gold text-ink">×</button>
+
+              <button type="button" data-key="1" class="calc-key bg-white text-ink">1</button>
+              <button type="button" data-key="2" class="calc-key bg-white text-ink">2</button>
+              <button type="button" data-key="3" class="calc-key bg-white text-ink">3</button>
+              <button type="button" data-key="-" class="calc-key bg-gold text-ink">−</button>
+
+              <button type="button" data-key="2nd" class="calc-key bg-agua text-ink font-bold">2nd</button>
+              <button type="button" data-key="0" class="calc-key bg-white text-ink">0</button>
+              <button type="button" data-key="." class="calc-key bg-white text-ink">,</button>
+              <button type="button" data-key="=" class="calc-key bg-royal text-white font-bold">=</button>
+            </div>
+
+            <div id="padFunc" class="mt-4 grid grid-cols-4 gap-2.5" hidden>
+              <button type="button" data-key="2nd" class="calc-key bg-agua text-ink font-bold">2nd</button>
+              <button type="button" data-key="AC" class="calc-key bg-rose text-ink">AC</button>
+              <button type="button" data-key="back" class="calc-key bg-white text-ink">
+                <span class="material-symbols-outlined !text-lg" aria-hidden="true">backspace</span>
+              </button>
+              <button type="button" data-key="(" class="calc-key bg-white text-ink-light">(</button>
+
+              <button type="button" data-key="sin(" class="calc-key bg-tangerine text-ink">sin</button>
+              <button type="button" data-key="cos(" class="calc-key bg-tangerine text-ink">cos</button>
+              <button type="button" data-key="tan(" class="calc-key bg-tangerine text-ink">tan</button>
+              <button type="button" data-key=")" class="calc-key bg-white text-ink-light">)</button>
+
+              <button type="button" data-key="log(" class="calc-key bg-tangerine text-ink">log</button>
+              <button type="button" data-key="log10(" class="calc-key bg-tangerine text-ink">log10</button>
+              <button type="button" data-key="log2(" class="calc-key bg-tangerine text-ink">log2</button>
+              <button type="button" data-key="sqrt(" class="calc-key bg-tangerine text-ink">√</button>
+
+              <button type="button" data-key="^2" class="calc-key bg-tangerine text-ink">x²</button>
+              <button type="button" data-key="^" class="calc-key bg-tangerine text-ink">xʸ</button>
+              <button type="button" data-key="%" class="calc-key bg-tangerine text-ink">%</button>
+              <button type="button" data-key="!" class="calc-key bg-tangerine text-ink">!</button>
+
+              <button type="button" data-key="pi" class="calc-key bg-white text-ink">π</button>
+              <button type="button" data-key="e" class="calc-key bg-white text-ink">e</button>
+              <button type="button" data-key="," class="calc-key bg-white text-ink">,</button>
+              <button type="button" data-key="=" class="calc-key bg-royal text-white font-bold">=</button>
+            </div>
+          </div>
+          <p class="mt-3 text-xs text-ink-light text-center">Cada cálculo na edição gratuita consome 1 crédito. Toque em <strong class="text-ink">2nd</strong> para funções avançadas — sin, log e √ são das edições pagas. Enter é o igual.</p>
+        </div>
+
+        <div id="tabResolvedor" hidden>
+          <div class="flex items-center justify-between gap-4 flex-wrap mb-6">
+            <div>
+              <p class="eyebrow">Inteligência artificial</p>
+              <h2 class="font-heading text-2xl sm:text-3xl font-black tracking-tight mt-1.5">O resolvedor.</h2>
+            </div>
+            <span class="inline-flex items-center gap-2 px-3 py-1.5 border-3 border-ink rounded-full bg-paper text-ink-light text-xs font-bold shadow-solid-sm">
+              <span class="w-2 h-2 rounded-full bg-royal"></span>
+              IA · <%= aiModel %>
+            </span>
+          </div>
+
+          <div class="border-3 border-ink rounded-card bg-gold p-6 shadow-solid -rotate-1">
+            <p class="eyebrow !text-ink">A conta da prova</p>
+            <p class="mt-3 text-sm text-ink leading-relaxed">
+              "João tinha 10 maçãs e deu 6 pro Pedro. Quantas sobraram?" — cola o problema aqui e a IA resolve
+              com cálculo passo a passo, versão avançada e alternativas.
+            </p>
+          </div>
+
+          <div class="mt-6">
+            <label class="block font-mono text-[10px] uppercase tracking-[0.2em] text-ink-light font-bold mb-2">Problema</label>
+            <textarea id="aiQuestion" rows="4" placeholder='Ex: "Maria comprou 3 cadernos por R$ 12 cada e pagou com R$ 50. Quanto recebeu de troco?"' class="w-full px-4 py-3 border-3 border-ink rounded-card bg-white focus:outline-none transition resize-none shadow-solid-sm"></textarea>
+            <div class="mt-4 flex flex-wrap items-center gap-3">
+              <button id="btnResolve" class="inline-flex items-center gap-2 px-7 py-3 border-3 border-ink rounded-full bg-royal text-white text-sm font-bold shadow-solid btn-hover transition cursor-pointer">
+                <span class="material-symbols-outlined !text-sm" aria-hidden="true">auto_awesome</span>
+                Resolver com a IA
+              </button>
+              <span class="text-xs text-ink-light"><%= user ? (fullAccess ? 'Incluso na sua edição.' : 'Custa ' + aiCost + ' créditos na edição gratuita.') : 'Entre para usar.' %> Máximo de <%= aiDailyLimit %> resoluções por dia.</span>
+            </div>
+          </div>
+
+          <div id="aiError" class="mt-4 px-5 py-4 border-3 border-ink rounded-card bg-rose text-ink text-sm shadow-solid-sm" hidden></div>
+          <div id="aiOutput" class="mt-6 space-y-5"></div>
+        </div>
+      </div>
+
+      <aside id="acesso" class="space-y-5">
+        <% if (user) { %>
+          <div class="border-card bg-white p-6 shadow-solid">
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 shrink-0 rounded-card bg-royal border-3 border-ink text-white flex items-center justify-center font-heading font-black text-xl uppercase shadow-solid-sm">
+                <%= String(user.username).charAt(0) %>
+              </div>
+              <div class="min-w-0 flex-1">
+                <p class="eyebrow">Sua edição</p>
+                <p class="font-body font-bold text-lg tracking-tight mt-0.5 truncate"><%= user.username %></p>
+                <p class="text-[10px] text-ink-light truncate"><%= user.email %></p>
+              </div>
+              <% if (planStatus.status === 'active') { %>
+                <span class="inline-flex items-center gap-2 px-3 py-1.5 border-3 border-ink rounded-full bg-gold text-ink text-xs font-bold shadow-solid-sm shrink-0">
+                  <span class="material-symbols-outlined !text-sm" aria-hidden="true">workspace_premium</span>
+                  <%= user.plan === 'vitalicio' ? 'Vitalícia' : 'Ativa' %>
+                </span>
+              <% } else { %>
+                <span class="inline-flex items-center gap-2 px-3 py-1.5 border-3 border-ink rounded-full bg-paper text-ink-light text-xs font-bold shrink-0">
+                  <%= planStatus.status === 'expired' ? 'Expirada' : 'Gratuita' %>
+                </span>
+              <% } %>
+            </div>
+
+            <% if (planStatus.status === 'active') { %>
+              <div class="mt-5 pt-5 space-y-1.5">
+                <p class="text-sm text-ink-light">
+                  <%= user.plan === 'vitalicio' ? 'Acesso completo. Para sempre.' : 'Acesso completo até ' + new Date(planStatus.expiresAt).toLocaleString('pt-BR') + '.' %>
+                </p>
+                <div class="inline-flex items-center gap-2 text-royal text-sm font-bold">
+                  <span class="material-symbols-outlined !text-sm" aria-hidden="true">check_circle</span>
+                  Liberado
+                </div>
+                <% if (user.plan !== 'vitalicio' && planStatus.expiresAt) {
+                  const daysLeft = Math.ceil((planStatus.expiresAt - Date.now()) / 86400000);
+                  if (daysLeft <= 2) { %>
+                    <div class="mt-4 px-4 py-3 border-3 border-ink rounded-card bg-gold text-ink text-sm shadow-solid-sm">
+                      <% if (daysLeft <= 0) { %>
+                        Seu plano acaba hoje.
+                      <% } else if (daysLeft === 1) { %>
+                        Falta 1 dia pro seu plano acabar.
+                      <% } else { %>
+                        Faltam <%= daysLeft %> dias pro seu plano acabar.
+                      <% } %>
+                      <a href="/planos" class="font-bold underline underline-offset-2">Renovar agora</a>
+                    </div>
+                  <% }
+                } %>
+              </div>
+            <% } else { %>
+              <div class="mt-5 pt-5">
+                <p class="text-sm text-ink-light"><%= planStatus.status === 'expired' ? 'Sua edição expirou. A calculadora continua aqui, esperando dignamente.' : 'Cada cálculo básico custa 1 crédito. Cada. Um. Cálculo.' %></p>
+                <a href="/planos" class="mt-4 inline-flex items-center justify-center w-full px-5 py-3 border-3 border-ink rounded-full bg-gold text-ink text-sm font-bold shadow-solid btn-hover no-underline">
+                  <%= planStatus.status === 'expired' ? 'Renovar acesso' : 'Conhecer as edições' %>
+                  <span class="material-symbols-outlined ml-2 !text-sm" aria-hidden="true">arrow_forward</span>
+                </a>
+              </div>
+            <% } %>
+            <div class="mt-4 pt-4 flex justify-end">
+              <a href="/conta/deletar" class="text-[10px] text-ink-light/60 hover:text-red transition no-underline">deletar conta</a>
+            </div>
+          </div>
+
+          <% if (!fullAccess) { %>
+          <div class="border-card bg-white p-6 shadow-solid">
+            <div class="flex items-center justify-between">
+              <p class="eyebrow">Créditos</p>
+              <span class="material-symbols-outlined text-royal !text-lg" aria-hidden="true">schedule</span>
+            </div>
+            <p class="mt-3 text-5xl font-heading font-black tracking-tight"><span id="creditValue"><%= user.credits %></span><span class="text-xl text-ink-light font-bold">/dia</span></p>
+            <p class="mt-1 text-xs text-ink-light">1 crédito é resgatado por dia. Sim, todo dia.</p>
+            <form method="post" action="/creditos/resgatar" class="mt-5">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+              <button type="submit" class="w-full px-5 py-3 border-3 border-ink rounded-full bg-ink text-paper text-sm font-bold btn-hover transition cursor-pointer">Resgatar crédito de hoje</button>
+            </form>
+          </div>
+          <% } %>
+        <% } else { %>
+          <% if (error) { %>
+            <div class="px-4 py-3 border-3 border-ink rounded-card bg-rose text-ink text-sm shadow-solid-sm"><%= error %></div>
+          <% } %>
+          <div class="border-card bg-white p-6 shadow-solid">
+            <p class="eyebrow">Conta</p>
+            <h3 class="font-heading text-xl font-black tracking-tight mt-1.5">Entrar</h3>
+            <form method="post" action="/entrar" class="mt-4 space-y-4">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+              <input type="text" name="identifier" placeholder="E-mail ou usuário" required autofocus class="w-full px-4 py-3 border-3 border-ink rounded-card bg-paper focus:outline-none transition" />
+              <input type="password" name="password" placeholder="Senha" required class="w-full px-4 py-3 border-3 border-ink rounded-card bg-paper focus:outline-none transition" />
+              <button type="submit" class="w-full px-5 py-3 border-3 border-ink rounded-full bg-royal text-white text-sm font-bold shadow-solid btn-hover transition cursor-pointer">Entrar</button>
+            </form>
+            <p class="text-center text-sm text-ink-light mt-4">Sem conta? <button id="goRegister" type="button" class="font-bold text-ink underline underline-offset-4 cursor-pointer">Crie uma gratuita</button></p>
+          </div>
+
+          <div class="border-card bg-white p-6 shadow-solid" hidden>
+            <p class="eyebrow">Conta</p>
+            <h3 class="font-heading text-xl font-black tracking-tight mt-1.5">Criar conta gratuita</h3>
+            <p class="mt-2 text-sm text-ink-light">Um crédito por dia. Você precisa entrar para resgatar — é assim que construímos hábito.</p>
+            <form method="post" action="/registrar" class="mt-4 space-y-4">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+              <input type="text" name="username" placeholder="Nome de usuário" minlength="3" maxlength="20" pattern="[a-zA-Z0-9_]+" required class="w-full px-4 py-3 border-3 border-ink rounded-card bg-paper focus:outline-none transition" />
+              <input type="email" name="email" placeholder="E-mail" required class="w-full px-4 py-3 border-3 border-ink rounded-card bg-paper focus:outline-none transition" />
+              <input type="password" name="password" placeholder="Senha · mínimo 6 caracteres" minlength="6" required class="w-full px-4 py-3 border-3 border-ink rounded-card bg-paper focus:outline-none transition" />
+              <button type="submit" class="w-full px-5 py-3 border-3 border-ink rounded-full bg-gold text-ink text-sm font-bold shadow-solid btn-hover transition cursor-pointer">Criar conta</button>
+            </form>
+            <p class="text-center text-sm text-ink-light mt-4">Já tem conta? <button id="goLogin" type="button" class="font-bold text-ink underline underline-offset-4 cursor-pointer">Entrar</button></p>
+          </div>
+        <% } %>
+
+        <div class="border-card bg-white p-6 shadow-solid-lg relative overflow-hidden">
+          <div class="pointer-events-none absolute inset-0">
+            <div class="absolute -top-12 -right-12 w-44 h-44 rounded-full bg-royal/10 blur-3xl"></div>
+          </div>
+          <p class="eyebrow">Deluxe Edition</p>
+          <h3 class="relative mt-2 font-heading text-xl font-black tracking-tight">Cálculo ilimitado. Para sempre.</h3>
+          <p class="relative mt-2 text-sm text-ink-light leading-relaxed">A edição Vitalícia é R$ 50, uma única vez. Mensal, R$ 5. Semanal, R$ 1. Tudo via Pix, sem burocracia.</p>
+          <a href="/planos" class="relative mt-5 inline-flex items-center justify-center w-full px-6 py-3 border-3 border-ink rounded-full bg-gold text-ink text-sm font-bold shadow-solid btn-hover no-underline">
+            Ver as edições
+            <span class="material-symbols-outlined ml-2 !text-sm" aria-hidden="true">arrow_forward</span>
+          </a>
+          <% if (user) { %>
+            <form action="/sair" method="post" class="relative mt-5 pt-5 border-t-3 border-ink/10">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+              <button type="submit" class="w-full px-6 py-3 rounded-full border-3 border-ink/25 text-sm font-semibold text-ink-light hover:bg-ink hover:text-paper transition cursor-pointer">
+                Sair
+              </button>
+            </form>
+          <% } %>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<script>
+  (() => {
+    const goRegister = document.getElementById('goRegister');
+    const goLogin = document.getElementById('goLogin');
+    if (goRegister && goLogin) {
+      const loginCard = goRegister.closest('.border-card');
+      const registerCard = goLogin.closest('.border-card');
+      goRegister.addEventListener('click', () => {
+        loginCard.hidden = true;
+        registerCard.hidden = false;
+        registerCard.querySelector('input[name="username"]').focus();
+      });
+      goLogin.addEventListener('click', () => {
+        registerCard.hidden = true;
+        loginCard.hidden = false;
+        loginCard.querySelector('input[name="identifier"]').focus();
+      });
+    }
+
+    const tabCalc = document.getElementById('tabCalculadora');
+    const tabAi = document.getElementById('tabResolvedor');
+    const btnCalcTab = document.getElementById('tabCalcBtn');
+    const btnAiTab = document.getElementById('tabAiBtn');
+    if (tabCalc && tabAi && btnCalcTab && btnAiTab) {
+      const active = 'flex-1 px-5 py-2.5 rounded-full text-sm font-bold border-3 border-ink bg-royal text-white shadow-solid-sm transition cursor-pointer';
+      const idle = 'flex-1 px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold border-3 border-transparent text-ink-light hover:text-ink transition cursor-pointer';
+      const showTab = (ai) => {
+        tabAi.hidden = !ai;
+        tabCalc.hidden = ai;
+        btnCalcTab.className = ai ? idle : active;
+        btnAiTab.className = ai ? active : idle;
+      };
+      btnCalcTab.addEventListener('click', () => showTab(false));
+      btnAiTab.addEventListener('click', () => showTab(true));
+    }
+  })();
+</script>
+<script src="/js/calculator.js"></script>
+<script src="/js/resolver.js"></script>
+<%- include('partials/foot') %>
