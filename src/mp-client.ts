@@ -48,7 +48,6 @@ export async function createPixPayment(
     payer: { email: userEmail },
     point_of_interaction: {
       type: 'PIX',
-      transaction_data: { description: `CalcUltra - ${plan.title}` },
     },
   };
 
