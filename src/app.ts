@@ -36,6 +36,9 @@ app.use(helmet({ contentSecurityPolicy: false }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(import.meta.dirname + '/../public'));
+app.get('/health', (_req, res) => {
+  res.json({ ok: true, uptime: process.uptime() });
+});
 app.use(
   session({
     store: new SqliteSessionStore(),
