@@ -54,7 +54,7 @@ docker compose up -d --build
 ```
 
 - Build em 2 estágios; `data/` (SQLite) fica num volume persistente.
-- Roda como usuário não-root, com `HEALTHCHECK` em `GET /health`.
+- `HEALTHCHECK` em `GET /health`.
 - **Atenção (Windows/Docker Desktop):** o SQLite usa WAL — não edite `data/db.sqlite` pelo host enquanto o contêiner estiver rodando. Escreva sempre pelas rotas do app ou com `docker exec` dentro de `/app`.
 
 ### Coolify (produção)

@@ -19,8 +19,7 @@ RUN npm prune --omit=dev
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/views ./views
 COPY --from=build /app/public ./public
-RUN mkdir -p /app/data && chown -R node:node /app/data
-USER node
+RUN mkdir -p /app/data
 EXPOSE 6000
 VOLUME ["/app/data"]
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
