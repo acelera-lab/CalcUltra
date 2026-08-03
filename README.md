@@ -37,7 +37,7 @@ Meme SaaS em Node.js + TypeScript + EJS + Tailwind + SQLite, com **Pix do Mercad
 ```bash
 npm install
 npm run css      # compila o Tailwind (styles/input.css -> public/css/style.css)
-npm run dev      # servidor em http://localhost:6000 (tsx watch)
+npm run dev      # servidor em http://localhost:3016 (tsx watch)
 ```
 
 Sem `MP_ACCESS_TOKEN`, o `/pagar/:plano` entra em **modo simulação** e ativa o plano na hora. Sem SMTP, os emails são apenas logados.
@@ -50,7 +50,7 @@ Copie `.env.example` para `.env` e preencha o que for usar.
 
 ```bash
 docker compose up -d --build
-# http://localhost:6000
+# http://localhost:3016
 ```
 
 - Build em 2 estágios; `data/` (SQLite) fica num volume persistente.
@@ -60,7 +60,7 @@ docker compose up -d --build
 ### Coolify (produção)
 
 1. Adicione o repositório em **New Resource → Dockerfile** (ou Docker Compose, se preferir).
-2. Defina a porta pública **6000** e o domínio **calc.esc-software.com** (HTTPS automático).
+2. Defina a porta pública **3016** e o domínio **calc.esc-software.com** (HTTPS automático).
 3. Configure as variáveis de ambiente (todas via painel):
 
 | Variável | Obrigatória | Valor de produção |

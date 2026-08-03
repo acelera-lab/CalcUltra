@@ -4,7 +4,7 @@ dotenv.config({ quiet: true });
 
 export const config = {
   env: process.env.NODE_ENV || 'development',
-  port: Number(process.env.PORT || 6000),
+  port: Number(process.env.PORT || 3016),
   sessionSecret: process.env.SESSION_SECRET || 'trocame-isso-ou-vai-ser-hackeado-por-um-chucknorris',
   mpAccessToken: process.env.MP_ACCESS_TOKEN || '',
   mpWebhookSecret: process.env.MP_WEBHOOK_SECRET || '',
@@ -21,7 +21,7 @@ export const config = {
   emailFrom: process.env.EMAIL_FROM || process.env.EMAIL_USER || '',
   reminderIntervalHours: Number(process.env.REMINDER_INTERVAL_HOURS || 6),
   reminderMinDays: Number(process.env.REMINDER_MIN_DAYS || 3),
-  appUrl: process.env.APP_URL || `http://localhost:${Number(process.env.PORT || 6000)}`,
+  appUrl: process.env.APP_URL || `http://localhost:${Number(process.env.PORT || 3016)}`,
   dbPath: process.env.DB_PATH || './data/db.sqlite',
   maxQuestionLength: 1000,
   aiSolveCredits: 3,
