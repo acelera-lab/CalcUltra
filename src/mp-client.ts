@@ -1,3 +1,4 @@
+import crypto from 'node:crypto';
 import { config, PLANS, PlanId } from './config.js';
 
 export interface MpPayment {
@@ -19,6 +20,7 @@ async function mpFetch(path: string, init?: RequestInit): Promise<Response> {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${config.mpAccessToken}`,
+        'X-Idempotency-Key': crypto.randomUUID(),
         ...(init?.headers || {}),
       },
     });
@@ -46,9 +48,6 @@ export async function createPixPayment(
     external_reference: String(userId),
     notification_url: `${config.appUrl}/webhooks/mercadopago`,
     payer: { email: userEmail },
-    point_of_interaction: {
-      type: 'PIX',
-    },
   };
 
   const res = await mpFetch('/v1/payments', {
